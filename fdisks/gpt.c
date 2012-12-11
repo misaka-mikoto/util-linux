@@ -1012,7 +1012,8 @@ static void gpt_init(struct fdisk_context *cxt)
 }
 
 
-static int gpt_probe_label(struct fdisk_context *cxt)
+static int gpt_probe_label(struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)))
 {
 	int mbr_type;
 
@@ -1237,7 +1238,8 @@ fail:
  * Returns 0 if successful write, otherwise, a corresponding error.
  * Any indication of error will abort the operation.
  */
-static int gpt_write_disklabel(struct fdisk_context *cxt)
+static int gpt_write_disklabel(struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)))
 {
 	if (!cxt)
 		goto err0;
@@ -1295,7 +1297,8 @@ err1:
  *   - primary and backup header validations
  *   - paritition validations
  */
-static int gpt_verify_disklabel(struct fdisk_context *cxt)
+static int gpt_verify_disklabel(struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)))
 {
 	int nerror = 0;
 	uint64_t ptnum;
@@ -1392,7 +1395,9 @@ static int gpt_verify_disklabel(struct fdisk_context *cxt)
 }
 
 /* Delete a single GPT partition, specified by partnum. */
-static int gpt_delete_partition(struct fdisk_context *cxt, int partnum)
+static int gpt_delete_partition(struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)),
+		int partnum)
 {
 	if (!cxt || partition_unused(&ents[partnum]) || partnum < 0)
 		return -EINVAL;
@@ -1476,8 +1481,11 @@ static int gpt_create_new_partition(int partnum, uint64_t fsect, uint64_t lsect,
 }
 
 /* Performs logical checks to add a new partition entry */
-static int gpt_add_partition(struct fdisk_context *cxt, int partnum,
-			     struct fdisk_parttype *t)
+static int gpt_add_partition(
+		struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)),
+		int partnum,
+		struct fdisk_parttype *t)
 {
 	uint64_t user_f, user_l;	/* user input ranges for first and last sectors */
 	uint64_t disk_f, disk_l;	/* first and last available sector ranges on device*/
@@ -1561,7 +1569,8 @@ static int gpt_add_partition(struct fdisk_context *cxt, int partnum,
 /*
  * Create a new GPT disklabel - destroys any previous data.
  */
-static int gpt_create_disklabel(struct fdisk_context *cxt)
+static int gpt_create_disklabel(struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)))
 {
 	int rc = 0;
 	ssize_t entry_sz = 0;
@@ -1610,8 +1619,10 @@ done:
 	return rc;
 }
 
-static struct fdisk_parttype *gpt_get_partition_type(struct fdisk_context *cxt,
-						     int i)
+static struct fdisk_parttype *gpt_get_partition_type(
+		struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)),
+		int i)
 {
 	struct fdisk_parttype *t;
 	struct gpt_guid uuid;
@@ -1632,8 +1643,11 @@ static struct fdisk_parttype *gpt_get_partition_type(struct fdisk_context *cxt,
 }
 
 
-static int gpt_set_partition_type(struct fdisk_context *cxt, int i,
-				  struct fdisk_parttype *t)
+static int gpt_set_partition_type(
+		struct fdisk_context *cxt,
+		struct fdisk_label *lb __attribute__((__unused__)),
+		int i,
+		struct fdisk_parttype *t)
 {
 	struct gpt_guid uuid;
 
@@ -1650,7 +1664,7 @@ static int gpt_set_partition_type(struct fdisk_context *cxt, int i,
 /*
  * Deinitialize fdisk-specific variables
  */
-static void gpt_deinit(struct fdisk_label *lb)
+static void gpt_deinit(struct fdisk_label *lb __attribute__((unused)))
 {
 	free(ents);
 	free(pheader);
@@ -1659,10 +1673,6 @@ static void gpt_deinit(struct fdisk_label *lb)
 	ents = NULL;
 	pheader = NULL;
 	bheader = NULL;
-
-	if (lb->cxt && lb->cxt->disklabel == FDISK_DISKLABEL_GPT)
-		lb->cxt->disklabel = FDISK_DISKLABEL_ANY;
-
 	partitions = 0;
 }
 
