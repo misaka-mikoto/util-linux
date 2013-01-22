@@ -18,8 +18,6 @@ fdisk_SOURCES = \
 	fdisks/fdisksunlabel.h \
 	fdisks/fdiskdoslabel.c \
 	fdisks/fdiskdoslabel.h \
-	fdisks/gpt.c \
-	fdisks/gpt.h \
 	fdisks/partname.c \
 	fdisks/common.h
 
