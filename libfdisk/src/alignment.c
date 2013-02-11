@@ -378,3 +378,4 @@ int fdisk_reset_alignment(struct fdisk_context *cxt)
 			    cxt->grain,	rc));
 	return rc;
 }
+
