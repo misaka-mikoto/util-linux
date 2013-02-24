@@ -144,26 +144,26 @@ struct fdisk_geometry {
 };
 
 struct fdisk_context {
-	int dev_fd;         /* device descriptor */
-	char *dev_path;     /* device path */
-	unsigned char *firstsector; /* buffer with master boot record */
+	int dev_fd;         /* 设备描述符 */
+	char *dev_path;     /* 设备路径 */
+	unsigned char *firstsector; /* 主引导记录的缓冲区 */
 
 	/* topology */
-	unsigned long io_size;		/* I/O size used by fdisk */
-	unsigned long optimal_io_size;	/* optional I/O returned by device */
-	unsigned long min_io_size;	/* minimal I/O size */
-	unsigned long phy_sector_size;	/* physical size */
-	unsigned long sector_size;	/* logical size */
+	unsigned long io_size;		/* fdisk已用I/O空间 */
+	unsigned long optimal_io_size;	/* 可选的I/ O返回的设备 */
+	unsigned long min_io_size;	/* 最小的I/O空间 */
+	unsigned long phy_sector_size;	/* 物理空间 */
+	unsigned long sector_size;	/* 逻辑空间 */
 	unsigned long alignment_offset;
 
-	enum fdisk_labeltype disklabel;	/* current disklabel */
+	enum fdisk_labeltype disklabel;	/* 当前盘符 */
 
 	/* alignment */
-	unsigned long grain;		/* alignment unit */
-	sector_t first_lba;		/* recommended begin of the first partition */
+	unsigned long grain;		/* 对齐单元 */
+	sector_t first_lba;		/* 首扇区 */
 
 	/* geometry */
-	sector_t total_sectors; /* in logical sectors */
+	sector_t total_sectors; /* 逻辑扇区 */
 	struct fdisk_geometry geom;
 
 	/* label operations and description */
